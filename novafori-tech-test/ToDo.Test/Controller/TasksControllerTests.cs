@@ -45,12 +45,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
             .Setup(x => x.GetTasksAsync(It.IsAny<Guid>()).Result)
-            .Throws(new UserNotFound());
+            .Throws(new UserNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<UserNotFound>(async () => await controller.GetAUsersTasks(userId));
+        await Assert.ThrowsAsync<UserNotFoundException>(async () => await controller.GetAUsersTasks(userId));
         mockedBusinessLogic
             .Verify(
                 x => x.GetTasksAsync(It.Is<Guid>(x => x == userId)),
@@ -116,12 +116,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
             .Setup(x => x.GetTaskAsync(userId, taskId).Result)
-            .Throws(new UserNotFound());
+            .Throws(new UserNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<UserNotFound>(async () => await controller.GetAUserTask(userId, taskId));
+        await Assert.ThrowsAsync<UserNotFoundException>(async () => await controller.GetAUserTask(userId, taskId));
         mockedBusinessLogic
             .Verify(
                 x => x.GetTaskAsync(userId, taskId),
@@ -137,12 +137,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
             .Setup(x => x.GetTaskAsync(userId, taskId).Result)
-            .Throws(new TaskNotFound());
+            .Throws(new TaskNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<TaskNotFound>(async () => await controller.GetAUserTask(userId, taskId));
+        await Assert.ThrowsAsync<TaskNotFoundException>(async () => await controller.GetAUserTask(userId, taskId));
         mockedBusinessLogic
             .Verify(
                 x => x.GetTaskAsync(userId, taskId),
@@ -211,12 +211,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
            .Setup(x => x.CreateTaskAsync(userId, mockUserTask).Result)
-           .Throws(new UserNotFound());
+           .Throws(new UserNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<UserNotFound>(async () => await controller.CreateAUserTask(userId, mockUserTask));
+        await Assert.ThrowsAsync<UserNotFoundException>(async () => await controller.CreateAUserTask(userId, mockUserTask));
         mockedBusinessLogic
            .Verify(
                 x => x.CreateTaskAsync(userId, mockUserTask),
@@ -293,12 +293,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
           .Setup(x => x.UpdateTaskAsync(userId, taskId, mockUserTask).Result)
-          .Throws(new UserNotFound());
+          .Throws(new UserNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<UserNotFound>(async () => await controller.UpdateAUserTask(userId, taskId, mockUserTask));
+        await Assert.ThrowsAsync<UserNotFoundException>(async () => await controller.UpdateAUserTask(userId, taskId, mockUserTask));
         mockedBusinessLogic
           .Verify(
                 x => x.UpdateTaskAsync(userId, taskId, mockUserTask),
@@ -320,12 +320,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
          .Setup(x => x.UpdateTaskAsync(userId, taskId, mockUserTask).Result)
-         .Throws(new TaskNotFound());
+         .Throws(new TaskNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<TaskNotFound>(async () => await controller.UpdateAUserTask(userId, taskId, mockUserTask));
+        await Assert.ThrowsAsync<TaskNotFoundException>(async () => await controller.UpdateAUserTask(userId, taskId, mockUserTask));
         mockedBusinessLogic
          .Verify(
                 x => x.UpdateTaskAsync(userId, taskId, mockUserTask),
@@ -347,12 +347,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
         .Setup(x => x.UpdateTaskAsync(userId, taskId, mockUserTask).Result)
-        .Throws(new CannotUpdateTaskId());
+        .Throws(new CannotUpdateTaskIdException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<CannotUpdateTaskId>(async () => await controller.UpdateAUserTask(userId, taskId, mockUserTask));
+        await Assert.ThrowsAsync<CannotUpdateTaskIdException>(async () => await controller.UpdateAUserTask(userId, taskId, mockUserTask));
         mockedBusinessLogic
         .Verify(
                 x => x.UpdateTaskAsync(userId, taskId, mockUserTask),
@@ -417,12 +417,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
             .Setup(x => x.DeleteTaskAsync(userId, taskId))
-            .Throws(new UserNotFound());
+            .Throws(new UserNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<UserNotFound>(async () => await controller.DeleteAUserTask(userId, taskId));
+        await Assert.ThrowsAsync<UserNotFoundException>(async () => await controller.DeleteAUserTask(userId, taskId));
         mockedBusinessLogic
             .Verify(
                 x => x.DeleteTaskAsync(userId, taskId),
@@ -438,12 +438,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
             .Setup(x => x.DeleteTaskAsync(userId, taskId))
-            .Throws(new TaskNotFound());
+            .Throws(new TaskNotFoundException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<TaskNotFound>(async () => await controller.DeleteAUserTask(userId, taskId));
+        await Assert.ThrowsAsync<TaskNotFoundException>(async () => await controller.DeleteAUserTask(userId, taskId));
         mockedBusinessLogic
             .Verify(
                 x => x.DeleteTaskAsync(userId, taskId),
@@ -459,12 +459,12 @@ public class TasksControllerTests
         var mockedBusinessLogic = new Mock<IUserTaskLogic>();
         mockedBusinessLogic
             .Setup(x => x.DeleteTaskAsync(userId, taskId))
-            .Throws(new UserDoesNotOwnTask());
+            .Throws(new UserDoesNotOwnTaskException());
 
         var controller = new TasksController(mockedBusinessLogic.Object);
 
         // Act and Assert
-        await Assert.ThrowsAsync<UserDoesNotOwnTask>(async () => await controller.DeleteAUserTask(userId, taskId));
+        await Assert.ThrowsAsync<UserDoesNotOwnTaskException>(async () => await controller.DeleteAUserTask(userId, taskId));
         mockedBusinessLogic
             .Verify(
                 x => x.DeleteTaskAsync(userId, taskId),

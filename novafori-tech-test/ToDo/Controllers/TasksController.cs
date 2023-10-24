@@ -24,7 +24,7 @@ public class TasksController : ControllerBase
         {
             return await _userTaskLogic.GetTasksAsync(userId);
         }
-        catch (UserNotFound ex)
+        catch (UserNotFoundException ex)
         {
             // return a not found message
             throw ex;
@@ -48,13 +48,13 @@ public class TasksController : ControllerBase
         {
             return await _userTaskLogic.GetTaskAsync(userId, taskId);
         }
-        catch (UserNotFound ex)
+        catch (UserNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        catch (TaskNotFound ex)
+        catch (TaskNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
@@ -76,7 +76,7 @@ public class TasksController : ControllerBase
         {
             return await _userTaskLogic.CreateTaskAsync(userId, task);
         }
-        catch (UserNotFound ex)
+        catch (UserNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
@@ -98,25 +98,25 @@ public class TasksController : ControllerBase
         {
             return await _userTaskLogic.UpdateTaskAsync(userId, taskId, task);
         }
-        catch (UserNotFound ex)
+        catch (UserNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        catch (TaskNotFound ex)
+        catch (TaskNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        catch (UserDoesNotOwnTask ex)
+        catch (UserDoesNotOwnTaskException ex)
         {
             // return a not allowed error message
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        catch (CannotUpdateTaskId ex)
+        catch (CannotUpdateTaskIdException ex)
         {
             // return a not allowed error message
             // todo return correct status code rather than rethrowing
@@ -140,19 +140,19 @@ public class TasksController : ControllerBase
         {
             await _userTaskLogic.DeleteTaskAsync(userId, taskId);
         }
-        catch (UserNotFound ex)
+        catch (UserNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        catch (UserDoesNotOwnTask ex)
+        catch (UserDoesNotOwnTaskException ex)
         {
             // return a not allowed error message
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        catch (TaskNotFound ex)
+        catch (TaskNotFoundException ex)
         {
             // return a not found message
             // todo return correct status code rather than rethrowing
