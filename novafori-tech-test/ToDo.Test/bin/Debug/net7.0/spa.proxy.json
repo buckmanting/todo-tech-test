@@ -1,0 +1,8 @@
+{
+"SpaProxyServer": {
+"ServerUrl": "https://localhost:44408",
+"LaunchCommand": "npm start",
+"WorkingDirectory": "/Volumes/LaCie/git/novafori-tech-test/novafori-tech-test/ToDo/ClientApp/",
+"MaxTimeoutInSeconds": "120"
+}
+}
