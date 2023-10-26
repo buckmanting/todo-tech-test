@@ -1,0 +1,21 @@
+.c-home__heading-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: flex-start;
+}
+
+.c-home__heading-container-item {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+}
+
+.c-home__button {
+    margin: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+

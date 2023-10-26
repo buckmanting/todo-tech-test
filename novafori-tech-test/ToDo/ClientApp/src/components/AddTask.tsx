@@ -1,31 +1,59 @@
-import React, { Component } from 'react';
+import React, {FormEvent, useContext, useState} from 'react';
+import {UserTask} from "../models/UserTask";
+import {TaskContext} from "../state/tasks.context";
+import {CurrentUserContext} from "./Home";
+import {Link, useNavigate} from "react-router-dom";
 
-export class AddTask extends Component {
-  static displayName = AddTask.name;
+export default (props: AddTaskProps) => {
+    const taskContext = useContext(TaskContext);
+    const currentUserContext = useContext(CurrentUserContext);
 
-  constructor(props: any) {
-    super(props);
-    this.state = { currentCount: 0 };
-    this.incrementCounter = this.incrementCounter.bind(this);
-  }
+    const navigate = useNavigate();
 
-  incrementCounter() {
-    this.setState({
-      currentCount: 1
-    });
-  }
+    const [description, setDescription] = useState('');
 
-  render() {
     return (
-      <div>
-        <h1>Counter</h1>
+        <form
+            onSubmit={(event: FormEvent) => {
+                event.preventDefault();
 
-        <p>This is a simple example of a React component.</p>
+                // @ts-ignore
+                const task = {
+                    createdAt: Date.now(),
+                    description,
+                    isDone: false
+                } as UserTask;
 
-        <p aria-live="polite">Current count: </p>
+                fetch(`/tasks/${currentUserContext.id}/create`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(task)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        taskContext.setCurrentTasks([...taskContext.tasks, data]);
+                        navigate('../');
+                    });
+            }}
+        >
+            <p>
+                <Link to={'/'}>Cancel</Link>
+            </p>
+            <h2>Add a new Task</h2>
+            <p>
+                <label htmlFor="task-description">New Task:</label>
+                <input
+                    id="task-description" type="text"
+                    value={description} onChange={e => setDescription(e.target.value)}
+                    required/>
+            </p>
+            <button type="submit">Submit</button>
+        </form>
+    )
+}
 
-        <button className="btn btn-primary" onClick={this.incrementCounter}>Increment</button>
-      </div>
-    );
-  }
+export interface AddTaskProps {
+    onChange: (event: FormEvent) => void;
 }
