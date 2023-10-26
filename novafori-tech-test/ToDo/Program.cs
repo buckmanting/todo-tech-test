@@ -1,3 +1,8 @@
+using ToDo.BusinessLogic;
+using ToDo.BusinessLogic.Interfaces;
+using ToDo.Repositories;
+using ToDo.Repositories.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +12,10 @@ builder.Services.AddControllersWithViews();
 // Add memory cache to the container
 
 builder.Services.AddMemoryCache();
+
+builder.Services.AddSingleton<IUserTaskLogic, UserTaskLogic>();
+builder.Services.AddSingleton<IUserTaskRepository, UserTaskRepository>();
+builder.Services.AddSingleton<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
