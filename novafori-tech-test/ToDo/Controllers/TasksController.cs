@@ -35,9 +35,6 @@ public class TasksController : ControllerBase
             // todo: return a 500 error message
             throw ex;
         }
-
-        // todo remove this once exceptions are caught and handled
-        return null;
     }
 
     [HttpGet]
@@ -70,7 +67,7 @@ public class TasksController : ControllerBase
 
     [HttpPost]
     [Route("{userId}/create")]
-    public async Task<UserTask> CreateAUserTask(Guid userId, [FromBody] UserTask task)
+    public async Task<UserTask> CreateAUserTask(Guid userId, [FromBody] NewUserTask task)
     {
         try
         {
@@ -129,7 +126,6 @@ public class TasksController : ControllerBase
             // todo return correct status code rather than rethrowing
             throw ex;
         }
-        return null;
     }
 
     [HttpDelete]
