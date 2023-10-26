@@ -189,12 +189,9 @@ public class UserTaskLogicTests
             Name = "Test",
             Email = "some@email.com"
         };
-        var userTask = new UserTask
+        var userTask = new NewUserTask
         {
-            Id = Guid.NewGuid(),
-            Description = "Test",
-            IsDone = false,
-            UserId = Guid.NewGuid()
+            Description = "Test"
         };
 
         var mockedUserTaskRepository = new Mock<IUserTaskRepository>();
@@ -224,12 +221,9 @@ public class UserTaskLogicTests
             Name = "Test",
             Email = "some@email.com"
         };
-        var userTask = new UserTask
+        var userTask = new NewUserTask()
         {
-            Id = Guid.NewGuid(),
             Description = "Test",
-            IsDone = false,
-            UserId = user.Id
         };
 
         var mockedUserTaskRepository = new Mock<IUserTaskRepository>();
@@ -248,13 +242,13 @@ public class UserTaskLogicTests
         var result = await userTaskLogic.CreateTaskAsync(user.Id, userTask);
 
         // Assert
-        Assert.Equal(result, userTask);
+        Assert.Equal(result.Description, userTask.Description);
         mockUserRepository.Verify(x => x.GetByIdAsync(It.Is<Guid>(x => x == user.Id)), Times.Once);
         mockedUserTaskRepository
             .Verify(
                 x => x.CreateAsync(
                     It.Is<Guid>(x => x == user.Id),
-                    It.Is<UserTask>(y => y == userTask)
+                    It.Is<UserTask>(y => y.Description == userTask.Description)
                 ),
                 Times.Once);
     }
@@ -264,12 +258,9 @@ public class UserTaskLogicTests
     {
         // Arrange
         var userId = Guid.NewGuid();
-        var userTask = new UserTask
+        var userTask = new NewUserTask
         {
-            Id = Guid.NewGuid(),
-            Description = "Test",
-            IsDone = false,
-            UserId = userId
+            Description = "Test"
         };
 
         var mockedUserTaskRepository = new Mock<IUserTaskRepository>();

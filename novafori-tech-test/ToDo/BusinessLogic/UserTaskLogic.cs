@@ -72,7 +72,7 @@ public class UserTaskLogic : IUserTaskLogic
     /// <param name="task">Task to be created</param>
     /// <returns>The new task</returns>
     /// <exception cref="UserNotFoundException">If the user is not found</exception>
-    public async Task<UserTask> CreateTaskAsync(Guid userId, UserTask task)
+    public async Task<UserTask> CreateTaskAsync(Guid userId, NewUserTask task)
     {
         var user = await _userRepository.GetByIdAsync(userId);
         if (user == null)
@@ -80,7 +80,12 @@ public class UserTaskLogic : IUserTaskLogic
             throw new UserNotFoundException();
         }
 
-        return await _userTaskRepository.CreateAsync(user.Id, task);
+        var newTask = new UserTask
+        {
+            Description = task.Description
+        };
+
+        return await _userTaskRepository.CreateAsync(user.Id, newTask);
     }
 
     /// <summary>
@@ -94,7 +99,7 @@ public class UserTaskLogic : IUserTaskLogic
     /// <exception cref="TaskNotFoundException">If the task is not found</exception>
     /// <exception cref="UserDoesNotOwnTaskException">If the user does not own the task</exception>
     /// <exception cref="CannotUpdateTaskIdException">If the task id parameter and task.id properties do not match</exception>
-    public async Task<UserTask> UpdateTaskAsync(Guid userId, Guid taskId, UserTask task)
+    public async Task<UserTask> UpdateTaskAsync(Guid userId, Guid taskId, UserTask updatedTask)
     {
         var user = await _userRepository.GetByIdAsync(userId);
         if (user == null)
@@ -113,12 +118,12 @@ public class UserTaskLogic : IUserTaskLogic
             throw new UserDoesNotOwnTaskException();
         }
         
-        if (userTask.Id!= taskId)
+        if (updatedTask.Id!= taskId)
         {
             throw new CannotUpdateTaskIdException();
         }
         
-        return await _userTaskRepository.UpdateAsync(userTask);
+        return await _userTaskRepository.UpdateAsync(updatedTask);
     }
 
     /// <summary>
