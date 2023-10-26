@@ -2,164 +2,26 @@ using Microsoft.AspNetCore.Mvc;
 using ToDo.BusinessLogic.Interfaces;
 using ToDo.Exceptions;
 using ToDo.Models;
+using ToDo.Repositories.Interfaces;
 
 namespace ToDo.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TasksController : ControllerBase
+public class CurrentUserController : ControllerBase
 {
-    private IUserTaskLogic _userTaskLogic;
+    private IUserRepository _userRepository;
 
-    public TasksController(IUserTaskLogic userTaskLogic)
+    public CurrentUserController(IUserRepository userRepository)
     {
-        _userTaskLogic = userTaskLogic;
+        _userRepository = userRepository;
     }
 
     [HttpGet]
-    [Route("{userId}")]
-    public async Task<IEnumerable<UserTask>> GetAUsersTasks(Guid userId)
+    public async Task<User> Index()
     {
-        try
-        {
-            return await _userTaskLogic.GetTasksAsync(userId);
-        }
-        catch (UserNotFoundException ex)
-        {
-            // return a not found message
-            throw ex;
-        }
-        catch (Exception ex)
-        {
-            //likely a server error at this point
-            // todo: return a 500 error message
-            throw ex;
-        }
-    }
-
-    [HttpGet]
-    [Route("{userId}/{taskId}")]
-    public async Task<UserTask> GetAUserTask(Guid userId, Guid taskId)
-    {
-        try
-        {
-            return await _userTaskLogic.GetTaskAsync(userId, taskId);
-        }
-        catch (UserNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (TaskNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (Exception ex)
-        {
-            //likely a server error at this point
-            // todo: return a 500 error message
-            throw ex;
-        }
-    }
-
-    [HttpPost]
-    [Route("{userId}/create")]
-    public async Task<UserTask> CreateAUserTask(Guid userId, [FromBody] UserTask task)
-    {
-        try
-        {
-            return await _userTaskLogic.CreateTaskAsync(userId, task);
-        }
-        catch (UserNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (Exception ex)
-        {
-            //likely a server error at this point
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-    }
-
-    [HttpPut]
-    [Route("{userId}/{taskId}/update")]
-    public async Task<UserTask> UpdateAUserTask(Guid userId, Guid taskId, [FromBody] UserTask task)
-    {
-        try
-        {
-            return await _userTaskLogic.UpdateTaskAsync(userId, taskId, task);
-        }
-        catch (UserNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (TaskNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (UserDoesNotOwnTaskException ex)
-        {
-            // return a not allowed error message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (CannotUpdateTaskIdException ex)
-        {
-            // return a not allowed error message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (Exception ex)
-        {
-            //likely a server error at this point
-            // todo: return a 500 error message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-    }
-
-    [HttpDelete]
-    [Route("{userId}/{taskId}/delete")]
-    public async Task DeleteAUserTask(Guid userId, Guid taskId)
-    {
-        try
-        {
-            await _userTaskLogic.DeleteTaskAsync(userId, taskId);
-        }
-        catch (UserNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (UserDoesNotOwnTaskException ex)
-        {
-            // return a not allowed error message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (TaskNotFoundException ex)
-        {
-            // return a not found message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
-        catch (Exception ex)
-        {
-            //likely a server error at this point
-            // todo: return a 500 error message
-            // todo return correct status code rather than rethrowing
-            throw ex;
-        }
+        // todo: this is janky, we need to pas the userId here as we don't have a cookie to store it in on te client
+        // if we did we could return the stubbed out data
+        return await _userRepository.GetByIdAsync(Guid.NewGuid());
     }
 }
